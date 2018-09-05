@@ -51,3 +51,6 @@
 /.idea
 
 /var/log/*
+
+/public/uploads/attendance/*
+!public/uploads/attendance/.gitkeep

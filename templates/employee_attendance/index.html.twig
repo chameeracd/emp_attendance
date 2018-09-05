@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Employee index{% endblock %}
+
+{% block body %}
+    <h1>Employee Attendance</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Emp_id</th>
+            <th>Name</th>
+            <th>Clock In</th>
+            <th>Clock Out</th>
+            <th>Worked Hours</th>
+            <th>OT Hours</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for attendance in attendanceRecs %}
+            <tr {{ attendance.clockIn > date('1970-01-01 08:30:01') ? ' style="background-color: red"' : '' }}>
+                <td>{{ attendance.id }}</td>
+                <td>{{ attendance.name }}</td>
+                <td>{{ attendance.clockIn|date("g:ia") }}</td>
+                <td>{{ attendance.clockOut|date("g:ia") }}</td>
+                <td>{{ attendance.clockOut.diff(attendance.clockIn)|date("%H:%I") }}</td>
+                <td>
+                    {% if attendance.clockOut > date('1970-01-01 19:00:00') %}
+                        {{ attendance.clockOut.diff(date('1970-01-01 19:00:00'))|date("%H:%I") }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('employee_attendance_import') }}">Upload Excel</a>
+{% endblock %}
